@@ -1,0 +1,24 @@
+Design of Cassandra Tables (primarily Primary Key)
+
+1. BaseTransaction Table
+((Date, State, Class, Rank, Zip, Estimate), ModelName, Time
+
+2. Counter Table
+((Date, State, Class, Rank, Estimate), Counter
+
+3. SortedCounter Table
+((Date, State, Class, Rank, Counter),  Estimate
+
+4. BestEstimate Table
+((Date, State) Estimate
+
+
+CQL
+
+1. CREATE TABLE basetransaction (datereported date, state text, class int, rank int, zip int, estimate int, modelname text, ts timestamp,  PRIMARY KEY ((datereported, state), class, rank, zip, estimate, modelname)) WITH CLUSTERING ORDER BY (class ASC, rank DESC, zip ASC, estimate DESC);
+
+2. CREATE TABLE basecounter (datereported date, state text, class int, rank int, estimate int, numberofestimators counter, PRIMARY KEY ((datereported, state), class, rank, estimate)) WITH CLUSTERING ORDER BY (class ASC, rank DESC, estimate DESC);
+
+3. CREATE TABLE sortedcounter ( datereported date, state text, class int, rank int, estimate int, numberofestimators int, PRIMARY KEY ((datereported, state), class, rank, numberofestimators, estimate ))  WITH CLUSTERING ORDER BY (class ASC, rank DESC, numberofestimators DESC, estimate DESC);
+
+4. CREATE TABLE bestestimate (datereported date, state text, estimate int, PRIMARY KEY ((datereported, state)));

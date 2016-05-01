@@ -1,0 +1,14 @@
+{
+  "mappings": {
+    "state": {
+      "properties": {
+        "address": {
+          "type": "nested", 
+          "properties": {
+            "zipcode":    { "type": "string"  }
+           }
+        }
+      }
+    }
+  }
+}

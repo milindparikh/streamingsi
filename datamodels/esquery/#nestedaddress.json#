@@ -1,0 +1,9 @@
+
+{
+    "query": {
+	"nested": {
+	    "path": "address",
+	    "query": {"match" : {"address.zipcode": "53574"}}
+	}
+    }
+}
