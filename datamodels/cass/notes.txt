@@ -1,4 +1,6 @@
 Design of Cassandra Tables (primarily Primary Key)
+reate keyspace mykeyspace WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' :  1 };
+
 
 1. BaseTransaction Table
 ((Date, State, Class, Rank, Zip, Estimate), ModelName, Time

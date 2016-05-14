@@ -1,0 +1,46 @@
+THere are things that in a distributed system that have to be done
+
+     Do "oncely"
+         Enable connections from outside for
+	 	Elasticsearch
+			sudo ufw allow 6300
+		Cassandra
+			sudo ufw allow 9042
+		Kafka
+			sudo ufw allow 9092
+		zookeeper
+			sudo uwf allow 2181
+		Flink
+			Job Manager
+			   sudo ufw allow 6123
+			And some other megotiated port in the 3xxxx range
+
+	Do "repeatedly"
+	   Everytime your ips for the cluster changes
+		Cassndra -- change listen and rpc address to bind to specific IP
+		     example in cassandra.yaml
+			 rpc_address: 192.168.43.178
+			 listen_address: 192.168.43.178
+		ElasticSearch -- change network.host to specific ip daddress
+	             example in elasticsearch.yml
+		     	 network.host: 192.168.43.178
+
+                Flink Cluster
+		     jobmanager.rpc.address: 192.168.43.178
+		     
+
+
+On Flink Cluster
+  Flink-Job Manager
+    Flink
+     Port : 6123
+        sudo ufw allow 6123
+   ElasticSearch
+      Port 6300
+   Cassandra
+      Port 9042
+    Kafka
+      port 9092
+    Zookeeper
+      port 2181
+      

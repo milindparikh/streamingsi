@@ -1,0 +1,14 @@
+1. Ingest predictor data into elasticsearch
+2. Ingest state data into elasticsearch
+3. Ingest event data into kafka
+
+Details
+
+  Main
+    elasicsearch 2.2
+    kafka 0.8.2.2
+
+  Helper
+    logstash-2.2.2
+    mdm-gen 0.5
+

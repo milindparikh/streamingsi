@@ -1,0 +1,50 @@
+THere are things that in a distributed system that have to be done
+
+     Do "oncely"
+         Enable connections from outside for MAIN Node
+	 	Elasticsearch
+			sudo ufw allow 6300
+		Cassandra
+			sudo ufw allow 9042
+		Kafka
+			sudo ufw allow 9092
+		zookeeper
+			sudo uwf allow 2181
+		Flink
+			Job Manager
+			   sudo ufw allow 6123
+			And some other megotiated port in the 3xxxx range
+
+
+          TASK NODE
+	       install sshd -- openssh-server
+	       scp authorized keys from MAIN node to TASK node
+	       verify passwordless access from MAIN node to TASK node
+	       install java
+	       set JAVA_HOME in .bashrc
+	       download flink
+	       expand flink
+	       
+	       
+	       
+
+	Do "repeatedly"
+	   Everytime your ips for the cluster changes
+		Cassndra -- change listen and rpc address to bind to specific IP
+		     example in cassandra.yaml
+			 rpc_address: 192.168.56.101
+			 listen_address: 192.168.56.101
+		ElasticSearch -- change network.host to specific ip daddress
+	             example in elasticsearch.yml
+		     	 network.host: 192.168.56.101
+
+                Flink Cluster
+		      MAIN NODE
+		      flink-conf.yaml
+		      		     jobmanager.rpc.address: 192.168.56.101
+				     slaves
+			                  configured task managers
+		      TASK NODES
+		           copy conf directory from MAIN to TASK
+			
+      

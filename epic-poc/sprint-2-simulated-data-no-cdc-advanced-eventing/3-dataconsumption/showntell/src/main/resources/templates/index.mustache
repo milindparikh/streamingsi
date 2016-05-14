@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <style>
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+th, td {
+    padding: 5px;
+}
+    </style>
+    
+    </head>
+<body>
+<form name="" action="/search">
+	<input type="text" name="state" placeholder="State"></input>
+	<input type="text" name="dateReported" placeholder="2016-01-01"></input>
+	<button type="submit">Search</button>
+</form>
+
+{{State}}  {{dateReported}}
+Best Data <b> {{bestData}} </b>
+
+
+<h2>Sorted Counters:</h2>
+
+<table style="width:100%">
+  <tr>
+    <th>Class</th>
+    <th>Rank</th>
+    <th>Estimate</th>
+    <th>Number of Estimators</th>
+  </tr>
+  {{#sortedCounters}}  
+  <tr>
+    <td>{{clazz}}</td>
+    <td>{{rank}}</td>
+    <td>{{estimate}}</td>
+    <td>{{numberofestimators}}</td>
+  </tr>
+  {{/sortedCounters}}
+  
+</table>
+
+<h2>Base Transactions:</h2>
+
+<table style="width:100%">
+  <tr>
+    <th>Class</th>
+    <th>Rank</th>
+    <th>zip</th>
+    <th>Estimate</th>
+    <th>Model Name</th>
+    <th>Time Stamp</th>
+  </tr>
+  {{#baseTransactions}}  
+  <tr>
+    <td>{{clazz}}</td>
+    <td>{{rank}}</td>
+    <td>{{zip}}</td>
+    <td>{{estimate}}</td>
+    <td>{{modelName}}</td>
+    <td>{{ts}}</td>
+  </tr>
+  {{/baseTransactions}}
+  
+</table>
+
+
+</body>
+</html>

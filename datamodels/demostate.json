@@ -16,8 +16,7 @@
 	{"entity": "address", "fields":
 	 [
 
-	     {"field": "zipcode", "fieldFunction": "address.randomuszipcodeforstate(../state)"},
-	     {"field": "noop", "fieldFunction": "session.setKeyValue([zipcode,this.zipcode])"}
+	     {"field": "zipcode", "fieldFunction": "address.randomuszipcodeforstate(../state)"}
 	 ]
 	}
     ],

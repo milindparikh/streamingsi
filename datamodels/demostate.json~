@@ -10,7 +10,7 @@
 	{"entity": "state", "fields":
 		 [
 		     {"field": "state", "fieldFunction": "address.randomusstate()"},
-		     {"field": "time", "fieldFunction": "time.globaltime(YYYY-MM-DDTHH:mm:ss)"}
+		     {"field": "time", "fieldFunction": "globaltime(YYYY-MM-DDTHH:mm:ss)"}
 		 ]
 	},
 	{"entity": "address", "fields":

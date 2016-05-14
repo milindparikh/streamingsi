@@ -1,0 +1,84 @@
+1. Verify the workiing of mdm-gen
+     nodejs ~/src/nodejs/mdm-gen/mdm-gen-sessions.js clear default
+     nodejs ~/src/nodejs/mdm-gen/mdm-gen.js ~/src/streamingsi/datamodels/states.json 1
+     nodejs ~/src/nodejs/mdm-gen/mdm-gen.js ~/src/streamingsi/datamodels/predictor.json 1     
+     nodejs ~/src/nodejs/mdm-gen/mdm-gen.js ~/src/streamingsi/datamodels/event.json 1
+ 
+2. Install ElasticSearch, Kafka, Logstash
+    2.1 configure elasticsearch's test index
+    curl -XPUT localhost:9200/test -d '
+{                                                                                                                                              
+  "mappings": {
+    "state": {
+      "properties": {
+        "address": {
+          "type": "nested", 
+          "properties": {
+            "zipcode":    { "type": "string"  }
+           }
+        }
+      }
+    }
+  }
+}'
+
+
+3. Test LogStash
+  ~/Downloads/logstash-2.2.2/bin/logstash agent -f ~/src/streamingsi/sprints/1-dataingestion/conf/logstash/test.conf
+   nodejs ~/src/nodejs/mdm-gen/mdm-gen.js ~/src/streamingsi/datamodels/event.json 1 >/tmp/event.log
+
+4. Test Logstash writing to Kafka
+      4.1 Run zookeeper
+      4.2 Run Kafka
+      4.3 Start kafka-console-consumer
+       	  ~/Downloads/kafka_2.10-0.8.2.2$/bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic test
+      4.4 Run Logstash
+	~/Downloads/logstash-2.2.2/bin/logstash agent -f ~/src/streamingsi/sprints/1-dataingestion/conf/logstash/testkafka.conf
+
+     4.5 Generate slow events
+	   nodejs ~/src/nodejs/mdm-gen/mdm-gen.js ~/src/streamingsi/datamodels/slowevent.json 3 >/tmp/event.log
+     4.6 Notice slow writes (10s apart) on kafka-console	   
+
+5. Test logstash writing to elasticsearch
+     5.1 Run elastic-search
+          ~/Downloads/elasticsearch-2.3.1/bin/elasticsearch
+     5.2 Run Logstash
+         	~/Downloads/logstash-2.2.2/bin/logstash agent -f ~/src/streamingsi/sprints/1-dataingestion/conf/logstash/testels.conf
+     5.3 Verify writes
+           compare output of logstash against elastic search
+	       curl 'localhost:9200/_cat/indices?v'
+               curl 'localhost:9200/test/_search?q=*&pretty'
+
+     5.3 Run Logstash for nested data
+        	 ~/Downloads/logstash-2.2.2/bin/logstash agent -f ~/src/streamingsi/sprints/1-dataingestion/conf/logstash/testnested.conf
+     5.4 Execute writes with nested data
+     	 	 nodejs ~/src/nodejs/mdm-gen/mdm-gen.js ~/src/streamingsi/datamodels/states.json >/tmp/teststate.log
+     5.5 Observe writes in logstash
+     5.6 Execute nested query in elasticsearch -- with specific zipcode as observed on 5.5
+curl -XGET localhost:9200/test/state/_search -d '
+{
+    "query": {
+    	     "nested": {
+    	     	       "path": "address",
+    		       "query": {"match" : {"address.zipcode": "03887"}}
+		       }
+	}
+}
+
+
+6. Setting up "Production" Pipelines
+    6.1
+	Delete test data
+	          nodejs ~/src/nodejs/mdm-gen/mdm-gen-sessions.js clear default
+        
+    6.2 Configure ElasticSearch and Kafka
+            Elastic Search
+	     	    Enable nesting for state
+            Kafka
+		    Create Topic 
+    bin/kafka-topics.sh --create --zookeeper 127.0.0.1:2181 --topic test --partitions 1 --replication-factor 1
+    
+        Instantiate Logstash
+		    1. For Predictor to get to mdm/predictor
+		    2. For State to get to mdm/predictor in elastic-search
+		    3. For 
